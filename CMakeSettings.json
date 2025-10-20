@@ -1,0 +1,26 @@
+﻿{
+    "configurations": [
+        {
+            "name": "x64-Release",
+            "generator": "Visual Studio 17 2022 Win64",
+            "configurationType": "Release",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
+            "buildRoot": "${projectDir}\\build\\${name}",
+            "installRoot": "${projectDir}\\install\\${name}",
+            "cmakeCommandArgs": "-DCMAKE_POLICY_DEFAULT_CMP0169=OLD -DCMAKE_POLICY_DEFAULT_CMP0144=OLD -DCMAKE_POLICY_DEFAULT_CMP0135=OLD -DCMAKE_POLICY_DEFAULT_CMP0126=OLD",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": "",
+            "inheritEnvironments": [ "msvc_x64_x64" ],
+            "variables": [
+                {
+                    "name": "CMAKE_GENERATOR_PLATFORM",
+                    "value": "x64",
+                    "type": "STRING"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+*.psd filter=lfs diff=lfs merge=lfs -text
+C:/Users/Administrator>cd[[:space:]]C:/Users/Administrator/HorseMenu/HorseMenu.zip filter=lfs diff=lfs merge=lfs -text
+C:/Users/Administrator filter=lfs diff=lfs merge=lfs -text
+C:/Users/Administrator/HorseMenu/HorseMenu.zip filter=lfs diff=lfs merge=lfs -text
