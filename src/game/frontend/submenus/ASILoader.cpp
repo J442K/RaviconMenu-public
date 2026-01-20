@@ -15,7 +15,7 @@ namespace YimMenu::Submenus
 	{
 	private:
 		std::vector<std::string> m_LoadedScripts;
-		std::vector<HMODULE> m_LoadedModules;
+		std::string m_GameDirectory;
 		std::string m_ASIDirectory;
 
 	public:
@@ -24,7 +24,7 @@ namespace YimMenu::Submenus
 			// Initialize Online ScriptHook
 			OnlineScriptHook::Initialize();
 			
-			// Set ASI directory to main game folder (not scripts subfolder)
+			// Set ASI directory to scripts folder under the game directory
 			// Try to find RDR2.exe process to get the correct game directory
 			HMODULE gameModule = GetModuleHandleA("RDR2.exe");
 			if (gameModule)
@@ -32,12 +32,23 @@ namespace YimMenu::Submenus
 				char gamePath[MAX_PATH];
 				GetModuleFileNameA(gameModule, gamePath, MAX_PATH);
 				std::filesystem::path gameDir = std::filesystem::path(gamePath).parent_path();
-				m_ASIDirectory = gameDir.string() + "\\"; // Main directory, not scripts subfolder
+				m_GameDirectory = gameDir.string() + "\\";
+				m_ASIDirectory = m_GameDirectory + "scripts\\";
 			}
 			else
 			{
-				// Fallback to common Steam path
-				m_ASIDirectory = "D:\\SteamLibrary\\steamapps\\common\\Red Dead Redemption 2\\";
+				// Fallback to current module path
+				char modulePath[MAX_PATH];
+				if (GetModuleFileNameA(nullptr, modulePath, MAX_PATH))
+				{
+					std::filesystem::path moduleDir = std::filesystem::path(modulePath).parent_path();
+					m_GameDirectory = moduleDir.string() + "\\";
+				}
+				else
+				{
+					m_GameDirectory = std::filesystem::current_path().string() + "\\";
+				}
+				m_ASIDirectory = m_GameDirectory + "scripts\\";
 			}
 			
 			// Create scripts directory if it doesn't exist
@@ -47,7 +58,7 @@ namespace YimMenu::Submenus
 			}
 			
 			// Create RampageFiles directory (required for Rampage)
-			std::string rampageFilesDir = m_ASIDirectory + "RampageFiles\\";
+			std::string rampageFilesDir = m_GameDirectory + "RampageFiles\\";
 			if (!std::filesystem::exists(rampageFilesDir))
 			{
 				std::filesystem::create_directories(rampageFilesDir);
@@ -150,11 +161,11 @@ namespace YimMenu::Submenus
 			auto it = std::find(m_LoadedScripts.begin(), m_LoadedScripts.end(), scriptName);
 			if (it != m_LoadedScripts.end())
 			{
-				size_t index = std::distance(m_LoadedScripts.begin(), it);
-				if (index < m_LoadedModules.size())
+				std::string fullPath = m_ASIDirectory + scriptName;
+				if (!OnlineScriptHook::UnloadASIFile(fullPath))
 				{
-					FreeLibrary(m_LoadedModules[index]);
-					m_LoadedModules.erase(m_LoadedModules.begin() + index);
+					Notifications::Show("ASI Loader", "Failed to unload: " + scriptName, NotificationType::Error);
+					return false;
 				}
 				m_LoadedScripts.erase(it);
 				Notifications::Show("ASI Loader", "Unloaded: " + scriptName, NotificationType::Info);
@@ -165,12 +176,8 @@ namespace YimMenu::Submenus
 
 		void UnloadAllScripts()
 		{
-			for (size_t i = 0; i < m_LoadedModules.size(); ++i)
-			{
-				FreeLibrary(m_LoadedModules[i]);
-			}
+			OnlineScriptHook::UnloadAllASI();
 			m_LoadedScripts.clear();
-			m_LoadedModules.clear();
 			Notifications::Show("ASI Loader", "All scripts unloaded", NotificationType::Info);
 		}
 
@@ -248,7 +255,7 @@ namespace YimMenu::Submenus
 					// Check game directory if not found in system directories
 					if (!found)
 					{
-						std::string gameDepPath = m_ASIDirectory + dep;
+					std::string gameDepPath = m_GameDirectory + dep;
 						if (std::filesystem::exists(gameDepPath))
 						{
 							found = true;
@@ -397,7 +404,7 @@ namespace YimMenu::Submenus
 		ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.1f, 1.0f), "INFORMATION:");
 		ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.2f, 1.0f), "This ASI loader uses a custom Online ScriptHook implementation for maximum compatibility.");
 		ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.2f, 1.0f), "Perfect for loading offline trainers like Rampage while playing Red Dead Online.");
-		ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.2f, 1.0f), "Place your .asi files directly in the main game directory (same folder as RDR2.exe).");
+		ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.2f, 1.0f), "Place your .asi files in the scripts folder (same folder as RDR2.exe/scripts).");
 		ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.2f, 1.0f), "Scripts are loaded using our custom ScriptHook SDK integration.");
 		ImGui::TextColored(ImVec4(0.2f, 0.8f, 0.2f, 1.0f), "✅ ONLINE SCRIPT HOOK: Custom implementation with ScriptHookRDR2 SDK");
 		ImGui::TextColored(ImVec4(0.2f, 0.8f, 0.2f, 1.0f), "✅ MAXIMUM COMPATIBILITY: Works with all ScriptHookRDR2 ASI files");

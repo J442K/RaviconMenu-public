@@ -13,7 +13,12 @@ namespace YimMenu
 	private:
 		static bool s_Initialized;
 		static std::vector<std::function<void()>> s_Scripts;
-		static std::vector<HMODULE> s_LoadedModules;
+		struct LoadedModule
+		{
+			std::string path;
+			HMODULE module;
+		};
+		static std::vector<LoadedModule> s_LoadedModules;
 
 	public:
 		// Initialize the online-compatible ScriptHook
@@ -24,6 +29,12 @@ namespace YimMenu
 		
 		// Load an ASI file with online compatibility
 		static bool LoadASIFile(const std::string& filePath);
+
+		// Unload a previously loaded ASI file
+		static bool UnloadASIFile(const std::string& filePath);
+
+		// Unload all ASI files but keep ScriptHook initialized
+		static void UnloadAllASI();
 		
 		// Execute all registered scripts
 		static void ExecuteScripts();
@@ -38,4 +49,3 @@ namespace YimMenu
 		static std::string GetVersion();
 	};
 }
-

@@ -1,12 +1,24 @@
 #include "OnlineScriptHook.hpp"
 #include "core/logger/LogHelper.hpp"
+#include <algorithm>
+#include <cctype>
 #include <filesystem>
 
 namespace YimMenu
 {
 	bool OnlineScriptHook::s_Initialized = false;
 	std::vector<std::function<void()>> OnlineScriptHook::s_Scripts;
-	std::vector<HMODULE> OnlineScriptHook::s_LoadedModules;
+	std::vector<OnlineScriptHook::LoadedModule> OnlineScriptHook::s_LoadedModules;
+
+	static std::string NormalizePath(const std::string& path)
+	{
+		std::string normalized = std::filesystem::path(path).lexically_normal().string();
+		std::transform(normalized.begin(), normalized.end(), normalized.begin(), [](unsigned char ch)
+		{
+			return static_cast<char>(std::tolower(ch));
+		});
+		return normalized;
+	}
 
 	bool OnlineScriptHook::Initialize()
 	{
@@ -52,36 +64,31 @@ namespace YimMenu
 		HMODULE scriptHook = GetModuleHandleA("ScriptHookRDR2.dll");
 		if (!scriptHook)
 		{
-			LOG(al::INFO) << "Loading ScriptHookRDR2.dll first for ASI compatibility...";
-			
-			// Try to find ScriptHookRDR2.dll in the game directory
-			std::string scriptHookPath = std::filesystem::path(filePath).parent_path().string() + "\\ScriptHookRDR2.dll";
-			if (std::filesystem::exists(scriptHookPath))
+			LOG(al::INFO) << "Attempting to load ScriptHookRDR2.dll for ASI compatibility...";
+
+			std::vector<std::filesystem::path> scriptHookSearch = {
+				std::filesystem::path(filePath).parent_path() / "ScriptHookRDR2.dll",
+				std::filesystem::path(filePath).parent_path().parent_path() / "ScriptHookRDR2.dll",
+				std::filesystem::current_path() / "ScriptHookRDR2.dll"
+			};
+
+			for (const auto& candidate : scriptHookSearch)
 			{
-				scriptHook = LoadLibraryA(scriptHookPath.c_str());
+				if (!std::filesystem::exists(candidate))
+					continue;
+
+				scriptHook = LoadLibraryA(candidate.string().c_str());
 				if (scriptHook)
 				{
-					LOG(al::INFO) << "ScriptHookRDR2.dll loaded successfully from game directory";
+					LOG(al::INFO) << "ScriptHookRDR2.dll loaded successfully from: " << candidate;
+					break;
 				}
-				else
-				{
-					LOG(al::FATAL) << "Failed to load ScriptHookRDR2.dll from game directory";
-					return false;
-				}
+				LOG(al::FATAL) << "Failed to load ScriptHookRDR2.dll from: " << candidate;
 			}
-			else
+
+			if (!scriptHook)
 			{
-				// Fallback to current directory
-				scriptHook = LoadLibraryA("ScriptHookRDR2.dll");
-				if (scriptHook)
-				{
-					LOG(al::INFO) << "ScriptHookRDR2.dll loaded successfully from current directory";
-				}
-				else
-				{
-					LOG(al::FATAL) << "Failed to load ScriptHookRDR2.dll from any location";
-					return false;
-				}
+				LOG(al::INFO) << "ScriptHookRDR2.dll not found - proceeding without it for online compatibility.";
 			}
 		}
 
@@ -105,7 +112,7 @@ namespace YimMenu
 			}
 		}
 
-		s_LoadedModules.push_back(module);
+		s_LoadedModules.push_back({NormalizePath(filePath), module});
 		LOG(al::INFO) << "Successfully loaded ASI file: " << filePath;
 		
 		// Give the ASI file time to initialize
@@ -199,13 +206,13 @@ namespace YimMenu
 						{
 							std::string filePath = entry.path().string();
 							std::string fileName = entry.path().filename().string();
-							
+
 							LOG(al::INFO) << "Loading RampageFile DLL: " << fileName;
-							
+
 							HMODULE rampageModule = LoadLibraryA(filePath.c_str());
 							if (rampageModule)
 							{
-								s_LoadedModules.push_back(rampageModule);
+								s_LoadedModules.push_back({NormalizePath(filePath), rampageModule});
 								LOG(al::INFO) << "Successfully loaded RampageFile DLL: " << fileName;
 							}
 							else
@@ -299,6 +306,39 @@ namespace YimMenu
 		return true;
 	}
 
+	bool OnlineScriptHook::UnloadASIFile(const std::string& filePath)
+	{
+		if (!s_Initialized)
+			return false;
+
+		std::string target = NormalizePath(filePath);
+		auto it = std::find_if(s_LoadedModules.begin(), s_LoadedModules.end(), [&](const LoadedModule& entry)
+		{
+			return entry.path == target;
+		});
+
+		if (it == s_LoadedModules.end())
+			return false;
+
+		FreeLibrary(it->module);
+		s_LoadedModules.erase(it);
+		LOG(al::INFO) << "Unloaded ASI file: " << filePath;
+		return true;
+	}
+
+	void OnlineScriptHook::UnloadAllASI()
+	{
+		if (!s_Initialized)
+			return;
+
+		for (const auto& entry : s_LoadedModules)
+		{
+			FreeLibrary(entry.module);
+		}
+		s_LoadedModules.clear();
+		LOG(al::INFO) << "All ASI files unloaded";
+	}
+
 	void OnlineScriptHook::ExecuteScripts()
 	{
 		if (!s_Initialized)
@@ -324,9 +364,9 @@ namespace YimMenu
 			return;
 
 		// Free all loaded modules
-		for (auto module : s_LoadedModules)
+		for (const auto& entry : s_LoadedModules)
 		{
-			FreeLibrary(module);
+			FreeLibrary(entry.module);
 		}
 		s_LoadedModules.clear();
 		s_Scripts.clear();
