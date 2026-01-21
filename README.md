@@ -1,13 +1,13 @@
 # 🏴‍☠️ Terminus - Red Dead Redemption 2 Mod Menu
 
-A modern, sleek mod menu for Red Dead Redemption 2 and Red Dead Online with RDR2-themed UI and ASI script loading capabilities.
+A modern, neon-styled mod menu for Red Dead Redemption 2 and Red Dead Online with a blue sci‑fi UI and ASI script loading capabilities.
 
 ## ✨ Features
 
-- **Modern RDR2-Themed UI**: Beautiful Western/Autumn color scheme with gold accents and brown tones
+- **Neon Sci‑Fi UI**: Blue glow accents, crisp paneling, and a futuristic layout inspired by in-game terminals
 - **ASI Script Loader**: Load offline trainers like Rampage while playing Red Dead Online
 - **Script Hook RDR2 Bypass**: No need for Script Hook RDR2 - direct ASI loading
-- **Enhanced Visual Design**: Rounded corners, improved spacing, and immersive styling
+- **Enhanced Visual Design**: Glow borders, pill toggles, and structured panels (top bar, nav, content, actions)
 - **All Original Features**: Self, Teleport, Network, Players, World, Recovery, Settings, Debug
 
 ## 🎯 Loading Rampage Online
@@ -15,7 +15,7 @@ A modern, sleek mod menu for Red Dead Redemption 2 and Red Dead Online with RDR2
 ### Step 1: Setup
 1. Download and extract Terminus to your desired location
 2. Download Rampage trainer (any version)
-3. Place Rampage's `.asi` file in your RDR2 game directory under `scripts/` folder
+3. Place Rampage's `.asi` file in your RDR2 game directory under the `scripts\` folder
    - Example: `C:\Program Files\Rockstar Games\Red Dead Redemption 2\scripts\Rampage.asi`
 
 ### Step 2: Injection
@@ -31,11 +31,11 @@ A modern, sleek mod menu for Red Dead Redemption 2 and Red Dead Online with RDR2
 
 ## 🎨 UI Theme
 
-The menu features a sophisticated RDR2-inspired design:
-- **Colors**: Dark brown/black backgrounds with gold text accents
-- **Style**: Western/Autumn theme with saddle brown borders
-- **Typography**: Enhanced spacing and rounded corners
-- **Icons**: Western-themed emojis and symbols
+The menu features a neon sci‑fi design:
+- **Colors**: Deep blue panels with bright cyan highlights
+- **Layout**: Top title bar, left navigation, main content panel, and bottom action bar
+- **Controls**: Rounded pill toggles with glowing ON state
+- **Accents**: Animated light strips and blue glow borders
 
 ## ⚠️ Important Warnings
 
@@ -61,13 +61,14 @@ The menu features a sophisticated RDR2-inspired design:
 ## 📁 File Structure
 
 ```
-HorseMenu/
+RaviconMenu/
 ├── src/
 │   ├── game/frontend/submenus/
 │   │   ├── ASILoader.hpp
 │   │   └── ASILoader.cpp
-│   └── game/frontend/
-│       └── Menu.cpp (updated with RDR2 theme)
+│   └── core/frontend/
+│       ├── manager/UIManager.cpp
+│       └── theme/RavenheartTheme.hpp
 └── README.md
 ```
 
@@ -86,13 +87,12 @@ The project uses CMake for building. Ensure you have:
 
 ## 📝 Changelog
 
-### Version 2.0 - Modern RDR2 Theme
-- ✅ Complete UI redesign with RDR2 Western theme
-- ✅ Added ASI Script Loader with Script Hook bypass
-- ✅ Enhanced visual styling with rounded corners
-- ✅ Gold/brown color scheme throughout
-- ✅ Improved spacing and typography
-- ✅ Added Rampage online loading support
+### Version 2.1 - Neon UI Refresh
+- ✅ Complete UI redesign with neon sci‑fi theme
+- ✅ Structured top/nav/content/bottom layout
+- ✅ Pill toggle styling for boolean controls
+- ✅ Blue glow borders and animated light strips
+- ✅ ASI loader and Rampage online loading support
 
 ## 🤝 Contributing
 

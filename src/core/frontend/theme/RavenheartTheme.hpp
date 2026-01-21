@@ -21,47 +21,48 @@ namespace YimMenu
 		{
 			ImGuiStyle& style = ImGui::GetStyle();
 			
-			// Clean modern colors like the CHERNX interface - more transparent
-			ImVec4 darkBackground = ImVec4(0.05f, 0.05f, 0.05f, 0.85f);     // Very dark background - 85% opacity
-			ImVec4 darkerBackground = ImVec4(0.02f, 0.02f, 0.02f, 0.80f);   // Almost black - 80% opacity
-			ImVec4 glowingBlue = ImVec4(0.4f, 0.2f, 0.8f, 1.0f);           // Blue-purple glow
-			ImVec4 brightBlue = ImVec4(0.6f, 0.4f, 1.0f, 1.0f);            // Bright blue-purple
-			ImVec4 whiteText = ImVec4(0.9f, 0.9f, 0.9f, 1.0f);             // Clean white text
+			// Blue neon palette inspired by the reference UI
+			ImVec4 darkBackground = ImVec4(0.06f, 0.08f, 0.12f, 0.88f);     // Deep blue background
+			ImVec4 darkerBackground = ImVec4(0.04f, 0.06f, 0.1f, 0.86f);    // Slightly darker blue
+			ImVec4 glowingBlue = ImVec4(0.17f, 0.55f, 1.0f, 1.0f);         // Neon blue glow
+			ImVec4 brightBlue = ImVec4(0.38f, 0.75f, 1.0f, 1.0f);          // Bright blue accent
+			ImVec4 whiteText = ImVec4(0.92f, 0.95f, 1.0f, 1.0f);           // Cool white text
+			ImVec4 mutedText = ImVec4(0.7f, 0.78f, 0.86f, 1.0f);
 			
 			// Window colors - clean dark theme
 			style.Colors[ImGuiCol_WindowBg] = darkBackground;
 			style.Colors[ImGuiCol_ChildBg] = darkerBackground;
 			style.Colors[ImGuiCol_PopupBg] = darkBackground;
 			
-			// Frame colors - clean dark with purple hover
+			// Frame colors - blue hover
 			style.Colors[ImGuiCol_FrameBg] = darkerBackground;
-			style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.4f, 0.2f, 0.8f, 0.2f); // Purple hover
-			style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.4f, 0.2f, 0.8f, 0.3f); // Purple active
+			style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.12f, 0.24f, 0.42f, 0.45f);
+			style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.15f, 0.3f, 0.5f, 0.6f);
 			
-			// Button colors - clean with blue accents
-			style.Colors[ImGuiCol_Button] = darkerBackground;
-			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.4f, 0.2f, 0.8f, 0.3f); // Purple hover
-			style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.4f, 0.2f, 0.8f, 0.5f); // Purple active
+			// Button colors - neon blue accents
+			style.Colors[ImGuiCol_Button] = ImVec4(0.08f, 0.12f, 0.2f, 0.9f);
+			style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.18f, 0.32f, 0.55f, 0.95f);
+			style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.22f, 0.4f, 0.7f, 0.98f);
 			
-			// Header colors - clean with purple hover
-			style.Colors[ImGuiCol_Header] = darkerBackground;
-			style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.4f, 0.2f, 0.8f, 0.3f); // Purple hover
-			style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.4f, 0.2f, 0.8f, 0.5f); // Purple active
+			// Header colors - blue hover
+			style.Colors[ImGuiCol_Header] = ImVec4(0.08f, 0.12f, 0.2f, 0.9f);
+			style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.15f, 0.28f, 0.5f, 0.95f);
+			style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.2f, 0.38f, 0.68f, 0.95f);
 			
 			// Text colors - clean white with blue accents
 			style.Colors[ImGuiCol_Text] = whiteText;
-			style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-			style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.2f, 0.1f, 0.4f, 0.5f);
+			style.Colors[ImGuiCol_TextDisabled] = mutedText;
+			style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.1f, 0.3f, 0.6f, 0.5f);
 			
-			// Border colors - subtle
-			style.Colors[ImGuiCol_Border] = ImVec4(0.9f, 0.9f, 0.9f, 1.0f); // White
+			// Border colors - neon blue
+			style.Colors[ImGuiCol_Border] = ImVec4(0.25f, 0.65f, 1.0f, 0.8f);
 			style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 			
 			// Scrollbar colors - clean
 			style.Colors[ImGuiCol_ScrollbarBg] = darkerBackground;
 			style.Colors[ImGuiCol_ScrollbarGrab] = brightBlue;
 			style.Colors[ImGuiCol_ScrollbarGrabHovered] = glowingBlue;
-			style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.8f, 0.6f, 1.0f, 1.0f);
+			style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.45f, 0.85f, 1.0f, 1.0f);
 			
 			// Slider colors - blue accents
 			style.Colors[ImGuiCol_SliderGrab] = brightBlue;
@@ -71,25 +72,25 @@ namespace YimMenu
 			style.Colors[ImGuiCol_CheckMark] = brightBlue;
 			
 			// Separator colors - white outlines
-			style.Colors[ImGuiCol_Separator] = ImVec4(0.9f, 0.9f, 0.9f, 1.0f); // White
-			style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // Bright white
-			style.Colors[ImGuiCol_SeparatorActive] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // Bright white
+			style.Colors[ImGuiCol_Separator] = ImVec4(0.2f, 0.5f, 0.85f, 0.8f);
+			style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.3f, 0.7f, 1.0f, 1.0f);
+			style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.3f, 0.7f, 1.0f, 1.0f);
 			
 			// Resize grip colors - blue accents
 			style.Colors[ImGuiCol_ResizeGrip] = brightBlue;
 			style.Colors[ImGuiCol_ResizeGripHovered] = glowingBlue;
 			style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.8f, 0.6f, 1.0f, 1.0f);
 			
-			// Tab colors - clean with purple hover
-			style.Colors[ImGuiCol_Tab] = darkerBackground;
-			style.Colors[ImGuiCol_TabHovered] = ImVec4(0.4f, 0.2f, 0.8f, 0.3f); // Purple hover
-			style.Colors[ImGuiCol_TabActive] = ImVec4(0.4f, 0.2f, 0.8f, 0.5f); // Purple active
-			style.Colors[ImGuiCol_TabUnfocused] = darkerBackground;
-			style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.06f, 0.06f, 0.06f, 1.0f);
+			// Tab colors - blue hover
+			style.Colors[ImGuiCol_Tab] = ImVec4(0.07f, 0.1f, 0.16f, 0.9f);
+			style.Colors[ImGuiCol_TabHovered] = ImVec4(0.18f, 0.32f, 0.55f, 0.95f);
+			style.Colors[ImGuiCol_TabActive] = ImVec4(0.22f, 0.4f, 0.7f, 0.95f);
+			style.Colors[ImGuiCol_TabUnfocused] = ImVec4(0.06f, 0.08f, 0.13f, 0.9f);
+			style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.12f, 0.18f, 0.28f, 0.9f);
 			
 			// Title bar colors - clean
 			style.Colors[ImGuiCol_TitleBg] = darkerBackground;
-			style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.08f, 0.08f, 0.08f, 1.0f);
+			style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.08f, 0.12f, 0.2f, 1.0f);
 			style.Colors[ImGuiCol_TitleBgCollapsed] = darkerBackground;
 			
 			// Menu bar colors - clean
@@ -101,9 +102,9 @@ namespace YimMenu
 			// Table colors
 			style.Colors[ImGuiCol_TableHeaderBg] = darkerBackground;
 			style.Colors[ImGuiCol_TableBorderStrong] = brightBlue;
-			style.Colors[ImGuiCol_TableBorderLight] = ImVec4(0.9f, 0.9f, 0.9f, 1.0f); // White
+			style.Colors[ImGuiCol_TableBorderLight] = ImVec4(0.2f, 0.45f, 0.8f, 0.8f);
 			style.Colors[ImGuiCol_TableRowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-			style.Colors[ImGuiCol_TableRowBgAlt] = ImVec4(0.05f, 0.05f, 0.05f, 0.5f);
+			style.Colors[ImGuiCol_TableRowBgAlt] = ImVec4(0.06f, 0.1f, 0.16f, 0.4f);
 			
 			// Plot colors
 			style.Colors[ImGuiCol_PlotLines] = brightBlue;
@@ -113,8 +114,8 @@ namespace YimMenu
 			
 			// Nav colors
 			style.Colors[ImGuiCol_NavHighlight] = glowingBlue;
-			style.Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.0f, 1.0f, 1.0f, 0.7f);
-			style.Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.8f, 0.8f, 0.8f, 0.2f);
+			style.Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(0.7f, 0.9f, 1.0f, 0.7f);
+			style.Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.2f, 0.3f, 0.4f, 0.2f);
 			
 			// Drag drop colors
 			style.Colors[ImGuiCol_DragDropTarget] = glowingBlue;
@@ -123,13 +124,13 @@ namespace YimMenu
 			// Note: These may not be available in all ImGui versions
 			
 			// Style settings for clean modern look
-			style.WindowRounding = 4.0f;
-			style.ChildRounding = 3.0f;
-			style.FrameRounding = 2.0f;
+			style.WindowRounding = 6.0f;
+			style.ChildRounding = 6.0f;
+			style.FrameRounding = 6.0f;
 			style.PopupRounding = 3.0f;
-			style.ScrollbarRounding = 3.0f;
-			style.GrabRounding = 2.0f;
-			style.TabRounding = 2.0f;
+			style.ScrollbarRounding = 6.0f;
+			style.GrabRounding = 6.0f;
+			style.TabRounding = 6.0f;
 			
 			// Border settings for clean look - subtle borders
 			style.WindowBorderSize = 1.0f;
@@ -139,9 +140,9 @@ namespace YimMenu
 			style.TabBorderSize = 0.0f;
 			
 			// Spacing for clean layout
-			style.WindowPadding = ImVec2(8, 8);
-			style.FramePadding = ImVec2(6, 4);
-			style.ItemSpacing = ImVec2(6, 4);
+			style.WindowPadding = ImVec2(12, 10);
+			style.FramePadding = ImVec2(8, 5);
+			style.ItemSpacing = ImVec2(8, 5);
 			style.ItemInnerSpacing = ImVec2(4, 3);
 			style.IndentSpacing = 15.0f;
 			style.ScrollbarSize = 14.0f;
@@ -160,9 +161,9 @@ namespace YimMenu
 			float perimeter = 2.0f * (size.x + size.y);
 			float lightPos = s_LightPosition * perimeter;
 			
-			// Purple light color with glow
-			ImU32 lightColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0.8f, 0.2f, 1.0f, 1.0f));
-			ImU32 glowColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0.8f, 0.2f, 1.0f, 0.6f));
+			// Neon blue light color with glow
+			ImU32 lightColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0.25f, 0.65f, 1.0f, 1.0f));
+			ImU32 glowColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0.25f, 0.65f, 1.0f, 0.6f));
 			
 			// Draw light strip along the border
 			if (lightPos < size.x) {
@@ -206,14 +207,14 @@ namespace YimMenu
 		{
 			ImDrawList* drawList = ImGui::GetWindowDrawList();
 			
-			// White glow border around the entire panel
-			ImU32 glowColor = ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 1.0f, 1.0f, 0.3f));
-			ImU32 borderColor = ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 1.0f, 1.0f, 0.8f));
+			// Blue glow border around the entire panel
+			ImU32 glowColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0.25f, 0.65f, 1.0f, 0.25f));
+			ImU32 borderColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0.25f, 0.65f, 1.0f, 0.9f));
 			
 			// Draw glow effect around the border
 			for (int i = 2; i >= 1; i--)
 			{
-				ImVec4 glow = ImVec4(1.0f, 1.0f, 1.0f, 0.2f / i);
+				ImVec4 glow = ImVec4(0.25f, 0.65f, 1.0f, 0.2f / i);
 				ImU32 glowU32 = ImGui::ColorConvertFloat4ToU32(glow);
 				
 				// Top edge glow
